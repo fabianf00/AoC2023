@@ -1,13 +1,5 @@
 import re
-
-
-def read_file(file_name) -> str:
-    with open(file_name) as f:
-        return f.read().rstrip()
-
-
-def split_lines(input) -> list:
-    return input.split("\n")
+from utils import read_file, split_lines
 
 
 def get_maximum_colors(sets):
@@ -48,7 +40,7 @@ def part2(lines):
     return power_sum
 
 
-input = read_file("input.txt")
+input = read_file("inputs/day02.txt")
 
 print("--- Part One ---")
 print(part1(split_lines(input)))

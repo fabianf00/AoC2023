@@ -1,4 +1,5 @@
 import re
+from utils import read_file, split_lines
 
 DIGITS = {
     "one": "1",
@@ -11,15 +12,6 @@ DIGITS = {
     "eight": "8",
     "nine": "9",
 }
-
-
-def read_file(file_name) -> str:
-    with open(file_name) as f:
-        return f.read().rstrip()
-
-
-def split_lines(input) -> list:
-    return input.split("\n")
 
 
 def part1(lines):
@@ -59,7 +51,7 @@ def part2(lines):
     return total
 
 
-input = read_file("input.txt")
+input = read_file("inputs/day01.txt")
 lines = split_lines(input)
 
 
