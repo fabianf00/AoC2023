@@ -2,16 +2,6 @@ from utils import read_file, split_lines
 from collections import defaultdict
 
 not_symbols = set("0123456789.")
-test_input = """467..114..
-...*......
-..35..633.
-......#...
-617*......
-.....+.58.
-..592.....
-......755.
-...$.*....
-.664.598.."""
 
 
 def expand_number(start_column, row):
@@ -42,19 +32,15 @@ def is_adjacent_to_symbol(lines, row_idx, start_column, length):
             if lines[row_index][col_index] not in not_symbols:
                 is_adjacent = True
                 # check if symbol is * (Part2)
-                if lines[row_index][col_index] is "*":
+                if lines[row_index][col_index] == "*":
                     gear_positions.append((row_index, col_index))
 
     return is_adjacent, gear_positions
 
 
 if __name__ == "__main__":
-    testing = False
-    if testing:
-        lines = split_lines(test_input)
-    else:
-        file_input = read_file("inputs/day03.txt")
-        lines = split_lines(file_input)
+    file_input = read_file("inputs/day03.txt")
+    lines = split_lines(file_input)
 
     answer_1 = 0
     answer_2 = 0
