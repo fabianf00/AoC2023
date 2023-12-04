@@ -37,4 +37,16 @@ if __name__ == "__main__":
 
     print(f"Answer 1: {answer_1}")
     print("--- Part 2 ---")
+    list_card_distribution = [1 for _ in range(len(lines))]
+
+    for index, line in enumerate(lines):
+        numbers = line.split(":")[1]
+        wining_numbers, numbers = get_numbers(numbers)
+        count_matching = count_matching_numbers(wining_numbers, numbers)
+        if count_matching == 0:
+            continue
+        for i in range(1, count_matching + 1):
+            list_card_distribution[index + i] += list_card_distribution[index]
+
+    answer_2 = sum(list_card_distribution)
     print(f"Answer 2: {answer_2}")
