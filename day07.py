@@ -61,6 +61,36 @@ def calulate_score(hand, values=CARD_VALUES):
         return 0, *map(lambda card: values[card], hand)
 
 
+def calculate_score_with_joker(hand):
+    if "J" not in hand:
+        return calulate_score(hand, CARD_VALUES_WITH_JOKER)
+
+    counter = Counter(hand)
+    number_of_jokers = counter["J"]
+    counter.pop("J")
+
+    if len(counter) <= 1:
+        # Five of a kind
+        return 6, *map(lambda card: CARD_VALUES_WITH_JOKER[card], hand)
+    if len(counter) == 2:
+        # Four of a kind
+        if counter.most_common(1)[0][1] + number_of_jokers == 4:
+            return 5, *map(lambda card: CARD_VALUES_WITH_JOKER[card], hand)
+        # Full house
+        return 4, *map(lambda card: CARD_VALUES_WITH_JOKER[card], hand)
+
+    if len(counter) == 3:
+        # Three of a kind
+        if counter.most_common(1)[0][1] + number_of_jokers == 3:
+            return 3, *map(lambda card: CARD_VALUES_WITH_JOKER[card], hand)
+        # Two pair
+        return 2, *map(lambda card: CARD_VALUES_WITH_JOKER[card], hand)
+
+    if len(counter) == 4:
+        # One pair
+        return 1, *map(lambda card: CARD_VALUES_WITH_JOKER[card], hand)
+
+
 if __name__ == "__main__":
     file_input = read_file("inputs/day07.txt")
     lines = split_lines(file_input)
@@ -77,3 +107,12 @@ if __name__ == "__main__":
         answer_1 += bet * (i + 1)
 
     print(answer_1)
+
+    print("Part 2")
+    sorted_hands_2 = sorted(
+        hands_to_bet.items(), key=lambda x: calculate_score_with_joker(x[0])
+    )
+    for i, (hand, bet) in enumerate(sorted_hands_2):
+        answer_2 += bet * (i + 1)
+
+    print(answer_2)
