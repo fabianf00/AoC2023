@@ -34,61 +34,57 @@ CARD_VALUES_WITH_JOKER = {
     "2": 1,
 }
 
+HAND_SCORES = {
+    "Five of a kind": 6,
+    "Four of a kind": 5,
+    "Full house": 4,
+    "Three of a kind": 3,
+    "Two pair": 2,
+    "One pair": 1,
+    "High card": 0,
+}
+
 
 def calulate_score(hand, values=CARD_VALUES):
     counter = Counter(hand)
     if len(counter) == 1:
-        # Five of a kind
-        return 6, *map(lambda card: values[card], hand)
+        return HAND_SCORES["Five of a kind"], *map(lambda card: values[card], hand)
     if len(counter) == 2:
-        # Four of a kind
         if counter.most_common(1)[0][1] == 4:
-            return 5, *map(lambda card: values[card], hand)
-        # Full house
-        return 4, *map(lambda card: values[card], hand)
-        #
+            return HAND_SCORES["Four of a kind"], *map(lambda card: values[card], hand)
+        return HAND_SCORES["Full house"], *map(lambda card: values[card], hand)
     if len(counter) == 3:
-        # Three of a kind
         if counter.most_common(1)[0][1] == 3:
-            return 3, *map(lambda card: values[card], hand)
-        # Two pair
-        return 2, *map(lambda card: values[card], hand)
+            return HAND_SCORES["Three of a kind"], *map(lambda card: values[card], hand)
+        return HAND_SCORES["Two pair"], *map(lambda card: values[card], hand)
     if len(counter) == 4:
-        # One pair
-        return 1, *map(lambda card: values[card], hand)
+        return HAND_SCORES["One pair"], *map(lambda card: values[card], hand)
     if len(counter) == 5:
-        # High card
-        return 0, *map(lambda card: values[card], hand)
+        return HAND_SCORES["High card"], *map(lambda card: values[card], hand)
 
 
-def calculate_score_with_joker(hand):
+def calculate_score_with_joker(hand, values=CARD_VALUES_WITH_JOKER):
     if "J" not in hand:
-        return calulate_score(hand, CARD_VALUES_WITH_JOKER)
+        return calulate_score(hand, values)
 
     counter = Counter(hand)
     number_of_jokers = counter["J"]
     counter.pop("J")
 
     if len(counter) <= 1:
-        # Five of a kind
-        return 6, *map(lambda card: CARD_VALUES_WITH_JOKER[card], hand)
+        return HAND_SCORES["Five of a kind"], *map(lambda card: values[card], hand)
     if len(counter) == 2:
-        # Four of a kind
         if counter.most_common(1)[0][1] + number_of_jokers == 4:
-            return 5, *map(lambda card: CARD_VALUES_WITH_JOKER[card], hand)
-        # Full house
-        return 4, *map(lambda card: CARD_VALUES_WITH_JOKER[card], hand)
+            return HAND_SCORES["Four of a kind"], *map(lambda card: values[card], hand)
+        return HAND_SCORES["Full house"], *map(lambda card: values[card], hand)
 
     if len(counter) == 3:
-        # Three of a kind
         if counter.most_common(1)[0][1] + number_of_jokers == 3:
-            return 3, *map(lambda card: CARD_VALUES_WITH_JOKER[card], hand)
-        # Two pair
-        return 2, *map(lambda card: CARD_VALUES_WITH_JOKER[card], hand)
+            return HAND_SCORES["Three of a kind"], *map(lambda card: values[card], hand)
+        return HAND_SCORES["Two pair"], *map(lambda card: values[card], hand)
 
     if len(counter) == 4:
-        # One pair
-        return 1, *map(lambda card: CARD_VALUES_WITH_JOKER[card], hand)
+        return HAND_SCORES["One pair"], *map(lambda card: values[card], hand)
 
 
 if __name__ == "__main__":
