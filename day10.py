@@ -2,19 +2,6 @@ from utils import read_file, split_lines
 import re
 from collections import deque
 
-"""
-
-    | is a vertical pipe connecting north and south.
-    - is a horizontal pipe connecting east and west.
-    L is a 90-degree bend connecting north and east.
-    J is a 90-degree bend connecting north and west.
-    7 is a 90-degree bend connecting south and west.
-    F is a 90-degree bend connecting south and east.
-    . is ground; there is no pipe in this tile.
-    S is the starting position of the animal; there is a pipe on this tile, but your sketch doesn't show what shape the pipe has.
-
-"""
-
 
 def check_coordinates(grid, *points):
     max_row = len(grid) - 1
@@ -75,20 +62,39 @@ def get_circle(grid, starting_row, starting_col):
     return seen
 
 
+def count_inside_circle(grid, circle):
+    count = 0
+    for r, row in enumerate(grid):
+        inside_circle = False
+        for c, label in enumerate(row):
+            if (r, c) not in circle:
+                if inside_circle:
+                    count += 1
+            elif label in "|F7S":
+                inside_circle = not inside_circle
+
+    return count
+
+
 if __name__ == "__main__":
     file_input = read_file("inputs/day10.txt")
     grid = split_lines(file_input)
 
     answer_1 = 0
-
-    print("Part 1")
+    starting_point = None
 
     for r, row in enumerate(grid):
         for c, col in enumerate(row):
             if col == "S":
-                answer_1 = len(get_circle(grid, r, c)) // 2
+                starting_point = (r, c)
                 break
+
+    print("Part 1")
+    circle = get_circle(grid, *starting_point)
+
+    answer_1 = len(circle) // 2
     print(answer_1)
 
     print("Part 2")
-    answer_2 = 0
+    answer_2 = count_inside_circle(grid, circle)
+    print(answer_2)
