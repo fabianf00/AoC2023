@@ -18,10 +18,12 @@ def expand_grid(grid, multiplier=2):
         for c, col in enumerate(row):
             new_row.append(col)
             if col_count[c] == 0:
-                new_row.append(".")
+                for _ in range(multiplier - 1):
+                    new_row.append(col)
         new_grid.append(new_row)
         if row_count[r] == 0:
-            new_grid.append(new_row)
+            for _ in range(multiplier - 1):
+                new_grid.append(new_row)
 
     return new_grid
 
@@ -54,3 +56,19 @@ if __name__ == "__main__":
     print(answer_1)
 
     print("Part 2")
+    grid = expand_grid(lines, 1000000)
+    print("Grid expanded")
+    galaxies = []
+
+    for r, row in enumerate(grid):
+        for c, col in enumerate(row):
+            if col == "#":
+                galaxies.append((r, c))
+    print("Galaxies found")
+
+    for i in range(len(galaxies)):
+        for j in range(i + 1, len(galaxies)):
+            dist = shortest_distance(galaxies[i], galaxies[j])
+            answer_2 += dist
+
+    print(answer_2)
