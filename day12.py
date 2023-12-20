@@ -1,7 +1,9 @@
 from utils import read_file, split_lines
 import re
+from functools import lru_cache
 
 
+@lru_cache(maxsize=None)
 def get_combinations(records, groups, current_length=0):
     if not records:
         if (
@@ -50,5 +52,11 @@ if __name__ == "__main__":
     print(answer_1)
 
     print("Part 2")
+    for line in lines:
+        records, groups = line.split()
+        records = "?".join([records] * 5)
+        groups = ",".join([groups] * 5)
+        groups = tuple(map(int, re.findall(r"\d+", groups)))
+        answer_2 += get_combinations(records, groups)
 
     print(answer_2)
